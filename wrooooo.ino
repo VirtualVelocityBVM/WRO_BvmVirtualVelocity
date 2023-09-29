@@ -1,4 +1,4 @@
-#include <NewPing.h>
+include <NewPing.h>
 #include <ESP32Servo.h>
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
@@ -54,7 +54,7 @@ CRGB leds[NUM_LEDS];
 ///////////////////////////////////////////////////////
 
 void setup() {
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);// to turn off pow on reset
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);  // to turn off pow on reset
   Serial.begin(115200);
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
   FastLED.clear();
@@ -68,11 +68,10 @@ void setup() {
   pinMode(nslp, OUTPUT);
   pinMode(ledPin, OUTPUT);
   digitalWrite(nslp, HIGH);
-  myServo.write(100);
+  myServo.write(95);
   myServo.attach(27);
   //attachInterrupt(14, counter, CHANGE);
   // Set up the interrupt on the specified pin (pin 14)
-
 }
 
 void loop() {
@@ -92,90 +91,133 @@ void loop() {
   Serial.print(" cm\tLeft Distance: ");
   Serial.print(leftDistance);
   Serial.print(" cm\tBack Distance: ");
-  Serial.print(backDistance);
-  Serial.println(" cm");
+  Serial.print("count");
+  Serial.println(countflag);
+
 
   //delay(100);  // Wait for 500 milliseconds before reading again
-frontcoloursensor();
+  frontcoloursensor();
+  //  if((frontDistance > 100) && (frontDistance!= 0)){
 
-  if ((rightDistance > 35 && rightDistance < 50) || (leftDistance > 35 && leftDistance < 50) && (rightDistance != 0) && (leftDistance != 0))  {
-    myServo.write(90);
-    ledcWrite(5, 0);
-    ledcWrite(6, 240);
-    frontcoloursensor();
   // if ((rightDistance < 35 ) && (leftDistance > 35 ) && (rightDistance != 0) && (leftDistance != 0))  {
   //   myServo.write(90);
   //   ledcWrite(5, 0);
   //   ledcWrite(6, 240);
-  //   frontcoloursensor();    
+  //   frontcoloursensor();
 
+
+  while (frontDistance > 100 && frontDistance!= 0) {
+
+    // if ((rightDistance < 25 && rightDistance > 20) && (rightDistance != 0)) {  //|| (leftDistance > 35 && leftDistance < 65)  && (leftDistance != 0))  {
+    //   myServo.write(95);
+    //   ledcWrite(5, 0);
+    //   ledcWrite(6, 210);
+    //   frontcoloursensor();
+    // }
+    if ((frontDistance > 100) && (rightDistance > 40) && (rightDistance != 0)) {
+      myServo.write(102);
+      ledcWrite(5, 0);
+      ledcWrite(6, 250);
+      frontcoloursensor();
+    }
+    if ((frontDistance > 100) && (rightDistance < 35) && (rightDistance != 0)) {
+      myServo.write(88);
+      ledcWrite(5, 0);
+      ledcWrite(6, 250);
+      frontcoloursensor();
+    }
+    break;
   }
-  if ((rightDistance < 45 ) && (rightDistance != 0) && (leftDistance != 0))  {
-    myServo.write(100);
+  
+  while ((frontDistance < 100) && (frontDistance!= 0)) {
+    //if (countflag = countflag++){
+    myServo.write(70);
     ledcWrite(5, 0);
     ledcWrite(6, 240);
     frontcoloursensor();
+    
+  //}
+  break;
   }
-  if ((leftDistance < 45 ) && (rightDistance != 0) && (leftDistance != 0))  {
-    myServo.write(80);
-    ledcWrite(5, 0);
-    ledcWrite(6, 240);
-    frontcoloursensor();
-  }
+  
+
+
+  // if ((leftDistance < 30 ) && (leftDistance != 0))  {
+  //   myServo.write(105);
+  //   ledcWrite(5, 0);
+  //   ledcWrite(6, 240);
+  //   frontcoloursensor();
+  //   else if ((leftDistance > 30 ) && (leftDistance != 0))  {
+  //   myServo.write(85);
+  //   ledcWrite(5, 0);
+  //   ledcWrite(6, 240);
+  //   frontcoloursensor();
+  //    }
+
+  // }
+  //}
   // if (frontDistance < 15 && frontDistance != 0) {
   //   ledcWrite(5, 0);
-  //   ledcWrite(6, 120);  
+  //   ledcWrite(6, 120);
   //   if (leftDistance > rightDistance){
   //     myServo.write(110);
   //     ledcWrite(5, 0);
-  //     ledcWrite(6, 120);  
+  //     ledcWrite(6, 120);
   //   }
   //   if (rightDistance > leftDistance){
   //     myServo.write(70);
   //     ledcWrite(5, 0);
-  //     ledcWrite(6, 120);  
+  //     ledcWrite(6, 120);
   //   }
   // }
-  if (frontDistance < 100 && frontDistance != 0) {
-    if(leftDistance > 45) 
-    {
-      myServo.write(65);
-      ledcWrite(5, 0);
-      ledcWrite(6, 180); 
-    }
-    if(leftDistance<20)
-    {
-     myServo.write(75);
-      ledcWrite(5, 0);
-      ledcWrite(6, 180);  
-    }
-    ledcWrite(5, 0);
-    ledcWrite(6, 180); 
-     
-    // if (countflag = countflag++);
-    //   myServo.write(75);
-    // frontcoloursensor();
-  }
+
+  // if ((frontDistance < 120) && (frontDistance != 0)) {  // && (countflag = countflag++)  imphgyukgggggggggggggggg
+  //   {
+  //     myServo.write(75);
+  //     ledcWrite(5, 0);
+  //     ledcWrite(6, 150);
+  //   }
+  // if(frontDistance > 30)
+  // {
+  //  myServo.write(70);
+  //   ledcWrite(5, 0);
+  //   ledcWrite(6, 180);
+  // }
+
+
+  // if (countflag = countflag++);
+  //   myServo.write(75);
+  // frontcoloursensor();
+  //}
   Serial.println(countflag);
-  // if(countflag>4)
-  // { 
-  // //  if(frontDistance < 100 && frontDistance != 0) {
-  // //   ledcWrite(5, 0);
-  // //   ledcWrite(6, 180);   
-  // //   myServo.write(85);
-  // //   //frontcoloursensor();
-  // // }
+  if(countflag>4){
+  //  if(frontDistance < 100 && frontDistance != 0) {
+    
+    myServo.write(75);
+    ledcWrite(5, 0);
+    ledcWrite(6, 240);
+    delay(3000);
+    myServo.write(90);
+    digitalWrite(nslp, LOW);
+    delay(10000);
+
+    
+    //frontcoloursensor();
+  }
+  //}
   // // if(frontDistance > 100)
   // // {
-  //   myServo.write(75);
-  //   delay(3000);
-  //   myServo.write(90);
-  //   digitalWrite(nslp, LOW);
-  //   delay(10000);
-   
+    // myServo.write(75);
+    // delay(3000);
+    // myServo.write(90);
+    // digitalWrite(nslp, LOW);
+    // delay(10000);
+
   // }
-  delay(100);
+//   delay(100);
+// }
 }
+
 void TCA9548A(uint8_t bus) {
   Wire.beginTransmission(PCA9548A_ADDRESS);
   Wire.write(1 << bus);
@@ -216,11 +258,11 @@ void frontcoloursensor() {
   Serial.print(" K ");
   Serial.print("Lux: ");
   Serial.println(lux, DEC);
- if (colorTemp > 8500) {
+  if (colorTemp > 10000) { 
     countflag++;
     // Toggle the RGB LED state rapidly
-   
-    // //turn on rgb for 1000ms 
+
+    // //turn on rgb for 1000ms
     // digitalWrite(ledPin, HIGH);
     // delay(1000);
     // //    //turn off rgb
@@ -228,4 +270,4 @@ void frontcoloursensor() {
     // // delay(1000);
   }
   delay(1);
- }
+}
